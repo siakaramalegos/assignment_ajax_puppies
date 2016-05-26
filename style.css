@@ -13,3 +13,20 @@ body {
 .text-center {
   text-align: center;
 }
+
+.notification {
+  width: 100%;
+}
+
+.warning {
+  background-color: #F8D972;
+}
+
+.error {
+  /*F8B172*/
+  background-color: #FFC09B;
+}
+
+.success {
+  background-color: #D9F595;
+}
