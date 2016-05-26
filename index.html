@@ -21,7 +21,7 @@
   <div class="container">
     <h3>Register a new puppy</h3>
 
-    <form>
+    <form id="new-puppy" data-ajaxremote='true'>
       <p>
         <label>Name</label><br>
         <input type="text" name="name">
@@ -29,10 +29,10 @@
 
       <p>
         <label>Breed</label><br>
-        <input type="text" name="breed">
+        <input type="text" name="breed_id">
       </p>
 
-      <input type="submit" name="submit">
+      <input type="submit" value="Add puppy!" id="new-puppy-submit">
     </form>
   </div>
 
