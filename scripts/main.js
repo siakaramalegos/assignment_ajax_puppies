@@ -4,7 +4,8 @@ var PUP = PUP || {};
 
 PUP.MainModule = (function(){
 
-  var puppies, breeds;
+  var puppies;
+  var breeds = {};
   var _puppiesURL = "https://ajax-puppies.herokuapp.com/puppies.json";
   var _breedsURL = "https://ajax-puppies.herokuapp.com/breeds.json";
 
@@ -32,10 +33,14 @@ PUP.MainModule = (function(){
     console.log('Getting breed list.');
     var xhr = new XMLHttpRequest();
     xhr.addEventListener( "load", function(){
-      PUP.MainModule.breeds = JSON.parse(this.responseText);
+      var breedsArray = JSON.parse(this.responseText);
+      breedsArray.forEach(function(breed){
+        PUP.MainModule.breeds[breed.id] = breed.name;
+      });
+      console.log(PUP.MainModule.breeds);
       // _renderBreedsDropdown();
     });
-    xhr.open("GET", _puppiesURL, true);
+    xhr.open("GET", _breedsURL, true);
     xhr.send();
   }
 
@@ -63,17 +68,29 @@ PUP.MainModule = (function(){
     _listenForAdopt();
   }
 
-  function _renderPuppy(puppy){
+  function _renderPuppy(puppy, breed_id, prepend){
+    var breedName;
+
+    if (breed_id) {
+      breedName = breeds[breed_id];
+    } else {
+      breedName = puppy.breed.name;
+    }
+
     var $puppyLink = $('<a href="#">adopt</a>')
       .attr('id', puppy.id)
       .attr('class', 'adopt-link');
     var time_stamp = jQuery.timeago(puppy.created_at);
     var $puppy = $('<li></li>')
       .append('<strong>' + puppy.name + '</strong>')
-      .append(' (' + puppy.breed.name + '), created ' + time_stamp + ' -- ')
+      .append(' (' + breedName + '), created ' + time_stamp + ' -- ')
       .append($puppyLink);
 
-    $('#puppy-list').append($puppy);
+    if (prepend) {
+      $('#puppy-list').prepend($puppy);
+    } else {
+      $('#puppy-list').append($puppy);
+    }
   }
 
 
@@ -86,7 +103,6 @@ PUP.MainModule = (function(){
       name: formData[0].value,
       breed_id: formData[1].value
     });
-    console.log(puppyData);
 
     $.ajax({
       url: _puppiesURL,
@@ -96,9 +112,7 @@ PUP.MainModule = (function(){
       dataType: 'json',
 
       success: function(json){
-        var puppy = JSON.parse(json);
-        console.log(puppy);
-        _renderPuppy(puppy);
+        _renderPuppy(json, json.breed_id, true);
       },
 
       error: function(xhr, status, errorThrown){
@@ -145,6 +159,7 @@ PUP.MainModule = (function(){
 
   return {
     init: init,
-    puppies: puppies
+    puppies: puppies,
+    breeds: breeds
   }
 })();
