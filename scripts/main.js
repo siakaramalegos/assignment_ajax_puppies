@@ -38,10 +38,20 @@ PUP.MainModule = (function(){
         PUP.MainModule.breeds[breed.id] = breed.name;
       });
       console.log(PUP.MainModule.breeds);
-      // _renderBreedsDropdown();
+      _renderBreedsDropdown(breedsArray);
     });
     xhr.open("GET", _breedsURL, true);
     xhr.send();
+  }
+
+  function _renderBreedsDropdown(breedsArray){
+    breedsArray.forEach(function(breed){
+      $breed = $('<option></option>')
+        .text(breed.name)
+        .attr('value', breed.id);
+
+      $("#breed-select").append($breed);
+    });
   }
 
   function _renderPuppies(){
