@@ -93,8 +93,6 @@ PUP.MainModule = (function(){
     }
   }
 
-
-
   function _addPuppy(event){
     event.preventDefault();
 
@@ -136,7 +134,7 @@ PUP.MainModule = (function(){
 
     var xhr = new XMLHttpRequest();
     xhr.addEventListener( "load", function(){
-      _getPuppies;
+      _getPuppies();
     });
     xhr.open("DELETE", url, true);
     xhr.send();
