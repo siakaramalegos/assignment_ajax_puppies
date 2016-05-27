@@ -10,6 +10,7 @@ PUP.MainModule = (function(){
   var _breedsURL = "https://ajax-puppies.herokuapp.com/breeds.json";
 
   function init(){
+    PUP.NotificationModule.init();
     console.log('Initiating main module...');
     _getPuppies();
     _getBreeds();
@@ -26,17 +27,8 @@ PUP.MainModule = (function(){
       method: 'GET',
 
       success: function(json){
-        _finishedNotification();
         PUP.MainModule.puppies = json;
         _renderPuppies();;
-      },
-
-      error: function(xhr, status, errorThrown){
-        _errorNotification(errorThrown);
-      },
-
-      complete: function( xhr, status ) {
-        console.log( "The request is complete!" );
       }
     });
 
@@ -50,20 +42,10 @@ PUP.MainModule = (function(){
       method: 'GET',
 
       success: function(json){
-        _finishedNotification();
-
         json.forEach(function(breed){
           PUP.MainModule.breeds[breed.id] = breed.name;
         });
         _renderBreedsDropdown(json);
-      },
-
-      error: function(xhr, status, errorThrown){
-        _errorNotification(errorThrown);
-      },
-
-      complete: function( xhr, status ) {
-        console.log( "The request is complete!" );
       }
     });
   }
@@ -144,16 +126,7 @@ PUP.MainModule = (function(){
       dataType: 'json',
 
       success: function(json){
-        _finishedNotification();
         _renderPuppy(json, json.breed_id, true);
-      },
-
-      error: function(xhr, status, errorThrown){
-        _errorNotification(errorThrown);
-      },
-
-      complete: function( xhr, status ) {
-        console.log( "The request is complete!" );
       }
     });
   }
@@ -169,16 +142,7 @@ PUP.MainModule = (function(){
       method: 'DELETE',
 
       success: function(json){
-        _finishedNotification();
         _getPuppies();
-      },
-
-      error: function(xhr, status, errorThrown){
-        _errorNotification(errorThrown);
-      },
-
-      complete: function( xhr, status ) {
-        console.log( "The request is complete!" );
       }
     });
   }
@@ -196,41 +160,6 @@ PUP.MainModule = (function(){
 
   function _listenForNewPuppy(){
     $('form#new-puppy').submit(_addPuppy);
-  }
-
-
-
-  // Notifications
-  function _finishedNotification(){
-    $('.notification')
-      .addClass('success')
-      .text('Finished!')
-      .show();
-
-    window.setTimeout(function(){
-      $('.notification')
-        .removeClass('success')
-        .fadeOut();
-    }, 2000)
-  }
-
-  function _errorNotification(errorThrown){
-    var error = 'Failed.';
-
-    if (errorThrown !== ''){
-      error += ' Errors were: ' + errorThrown;
-    }
-
-    $('.notification')
-      .addClass('error')
-      .text(error)
-      .show();
-
-    window.setTimeout(function(){
-      $('.notification')
-        .removeClass('error')
-        .fadeOut();
-    }, 2000)
   }
 
   return {
