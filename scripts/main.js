@@ -20,32 +20,52 @@ PUP.MainModule = (function(){
     if (event) { event.preventDefault(); }
 
     console.log('Getting puppy list.');
-    var xhr = new XMLHttpRequest();
-    xhr.addEventListener( "load", function(){
-      _finishedNotification();
 
-      PUP.MainModule.puppies = JSON.parse(this.responseText);
-      _renderPuppies();
+    $.ajax({
+      url: _puppiesURL,
+      method: 'GET',
+
+      success: function(json){
+        _finishedNotification();
+        PUP.MainModule.puppies = json;
+        _renderPuppies();;
+      },
+
+      error: function(xhr, status, errorThrown){
+        _errorNotification(errorThrown);
+      },
+
+      complete: function( xhr, status ) {
+        console.log( "The request is complete!" );
+      }
     });
-    xhr.open("GET", _puppiesURL, true);
-    xhr.send();
+
   }
 
   function _getBreeds(event){
     console.log('Getting breed list.');
-    var xhr = new XMLHttpRequest();
-    xhr.addEventListener( "load", function(){
-      _finishedNotification();
 
-      var breedsArray = JSON.parse(this.responseText);
-      breedsArray.forEach(function(breed){
-        PUP.MainModule.breeds[breed.id] = breed.name;
-      });
-      console.log(PUP.MainModule.breeds);
-      _renderBreedsDropdown(breedsArray);
+    $.ajax({
+      url: _breedsURL,
+      method: 'GET',
+
+      success: function(json){
+        _finishedNotification();
+
+        json.forEach(function(breed){
+          PUP.MainModule.breeds[breed.id] = breed.name;
+        });
+        _renderBreedsDropdown(json);
+      },
+
+      error: function(xhr, status, errorThrown){
+        _errorNotification(errorThrown);
+      },
+
+      complete: function( xhr, status ) {
+        console.log( "The request is complete!" );
+      }
     });
-    xhr.open("GET", _breedsURL, true);
-    xhr.send();
   }
 
   function _renderBreedsDropdown(breedsArray){
@@ -124,18 +144,15 @@ PUP.MainModule = (function(){
       dataType: 'json',
 
       success: function(json){
+        _finishedNotification();
         _renderPuppy(json, json.breed_id, true);
       },
 
       error: function(xhr, status, errorThrown){
-        alert( "Sorry, there was a problem!" );
-        console.log( "Error: " + errorThrown );
-        console.log( "Status: " + status );
-        console.dir( xhr );
+        _errorNotification(errorThrown);
       },
 
       complete: function( xhr, status ) {
-        _finishedNotification();
         console.log( "The request is complete!" );
       }
     });
@@ -147,13 +164,23 @@ PUP.MainModule = (function(){
     console.log('Adopting puppy #' + event.target.id);
     var url = "https://ajax-puppies.herokuapp.com/puppies/" + event.target.id + ".json";
 
-    var xhr = new XMLHttpRequest();
-    xhr.addEventListener( "load", function(){
-      _finishedNotification();
-      _getPuppies();
+    $.ajax({
+      url: url,
+      method: 'DELETE',
+
+      success: function(json){
+        _finishedNotification();
+        _getPuppies();
+      },
+
+      error: function(xhr, status, errorThrown){
+        _errorNotification(errorThrown);
+      },
+
+      complete: function( xhr, status ) {
+        console.log( "The request is complete!" );
+      }
     });
-    xhr.open("DELETE", url, true);
-    xhr.send();
   }
 
 
@@ -183,6 +210,25 @@ PUP.MainModule = (function(){
     window.setTimeout(function(){
       $('.notification')
         .removeClass('success')
+        .fadeOut();
+    }, 2000)
+  }
+
+  function _errorNotification(errorThrown){
+    var error = 'Failed.';
+
+    if (errorThrown !== ''){
+      error += ' Errors were: ' + errorThrown;
+    }
+
+    $('.notification')
+      .addClass('error')
+      .text(error)
+      .show();
+
+    window.setTimeout(function(){
+      $('.notification')
+        .removeClass('error')
         .fadeOut();
     }, 2000)
   }
