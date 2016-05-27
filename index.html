@@ -15,33 +15,36 @@
   <script type="text/javascript" src="scripts/run.js"></script>
 </head>
 <body>
+  <div class="notification"></div>
 
-  <h1 class="text-center">The AJAX Puppy Shelter</h1>
+  <main>
+    <h1 class="text-center">The AJAX Puppy Shelter</h1>
 
-  <div class="container">
-    <h3>Register a new puppy</h3>
+    <div class="container">
+      <h3>Register a new puppy</h3>
 
-    <form id="new-puppy" data-ajaxremote='true'>
-      <p>
-        <label>Name</label><br>
-        <input type="text" name="name">
-      </p>
+      <form id="new-puppy" data-ajaxremote='true'>
+        <p>
+          <label>Name</label><br>
+          <input type="text" name="name">
+        </p>
 
-      <p>
-        <label>Breed</label><br>
-        <select name="breed_id" id="breed-select"></select>
-      </p>
+        <p>
+          <label>Breed</label><br>
+          <select name="breed_id" id="breed-select"></select>
+        </p>
 
-      <input type="submit" value="Add puppy!" id="new-puppy-submit">
-    </form>
-  </div>
+        <input type="submit" value="Add puppy!" id="new-puppy-submit">
+      </form>
+    </div>
 
-  <div class="container">
-    <h3>Our puppies:</h3>
+    <div class="container">
+      <h3>Our puppies:</h3>
 
-    <a id="refresh" href="#">Refresh puppies list</a>
+      <a id="refresh" href="#">Refresh puppies list</a>
 
-    <ul id="puppy-list"></ul>
-  </div>
+      <ul id="puppy-list"></ul>
+    </div>
+  </main>
 </body>
 </html>

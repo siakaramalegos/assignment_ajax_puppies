@@ -22,6 +22,8 @@ PUP.MainModule = (function(){
     console.log('Getting puppy list.');
     var xhr = new XMLHttpRequest();
     xhr.addEventListener( "load", function(){
+      _finishedNotification();
+
       PUP.MainModule.puppies = JSON.parse(this.responseText);
       _renderPuppies();
     });
@@ -33,6 +35,8 @@ PUP.MainModule = (function(){
     console.log('Getting breed list.');
     var xhr = new XMLHttpRequest();
     xhr.addEventListener( "load", function(){
+      _finishedNotification();
+
       var breedsArray = JSON.parse(this.responseText);
       breedsArray.forEach(function(breed){
         PUP.MainModule.breeds[breed.id] = breed.name;
@@ -131,6 +135,7 @@ PUP.MainModule = (function(){
       },
 
       complete: function( xhr, status ) {
+        _finishedNotification();
         console.log( "The request is complete!" );
       }
     });
@@ -144,6 +149,7 @@ PUP.MainModule = (function(){
 
     var xhr = new XMLHttpRequest();
     xhr.addEventListener( "load", function(){
+      _finishedNotification();
       _getPuppies();
     });
     xhr.open("DELETE", url, true);
@@ -163,6 +169,22 @@ PUP.MainModule = (function(){
 
   function _listenForNewPuppy(){
     $('form#new-puppy').submit(_addPuppy);
+  }
+
+
+
+  // Notifications
+  function _finishedNotification(){
+    $('.notification')
+      .addClass('success')
+      .text('Finished!')
+      .show();
+
+    window.setTimeout(function(){
+      $('.notification')
+        .removeClass('success')
+        .hide();
+    }, 2000)
   }
 
   return {

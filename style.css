@@ -1,7 +1,16 @@
 body {
   font-family: Tahoma, Geneva, sans-serif;
   color: #333;
-  padding: 50px 0 0 0;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  position: absolute;
+  top: 50px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
@@ -16,6 +25,11 @@ body {
 
 .notification {
   width: 100%;
+  height: 50px;
+  padding-top: 10px;
+  display: none;
+  font-weight: 700;
+  text-align: center;
 }
 
 .warning {
