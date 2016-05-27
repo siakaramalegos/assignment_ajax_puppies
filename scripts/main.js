@@ -183,7 +183,7 @@ PUP.MainModule = (function(){
     window.setTimeout(function(){
       $('.notification')
         .removeClass('success')
-        .hide();
+        .fadeOut();
     }, 2000)
   }
 
