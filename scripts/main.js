@@ -80,7 +80,6 @@ PUP.MainModule = (function(){
 
     // Listeners
     _listenForRefresh();
-    // Where should this go? It won't work for individually added puppies
     _listenForAdopt();
   }
 
@@ -133,6 +132,8 @@ PUP.MainModule = (function(){
 
   function _adoptPuppy(event){
     event.preventDefault();
+    console.log('trying to adopt');
+
 
     console.log('Adopting puppy #' + event.target.id);
     var url = "https://ajax-puppies.herokuapp.com/puppies/" + event.target.id + ".json";
@@ -155,7 +156,7 @@ PUP.MainModule = (function(){
   }
 
   function _listenForAdopt(){
-    $('.adopt-link').click(_adoptPuppy);
+    $('ul#puppy-list').on('click', '.adopt-link', _adoptPuppy);
   }
 
   function _listenForNewPuppy(){
